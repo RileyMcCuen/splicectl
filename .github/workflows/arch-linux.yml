@@ -23,11 +23,18 @@ jobs:
         uses: actions/setup-go@v2
         with:
           go-version: 1.16
+      -
+        name: Build Application
+        run: go build .
       - 
         name: Build Arch Linux package
         uses: FFY00/build-arch-package@v1
         with:
-          PKGBUILD: $GITHUB_WORKSPACE/PKGBUILD
+          PKGBUILD: PKGBUILD
+          OUTDIR: ./
+      -
+        name: list dir
+        run: ls -ltra
       -
         name: Upload to S3
         uses: shallwefootball/s3-upload-action@master
