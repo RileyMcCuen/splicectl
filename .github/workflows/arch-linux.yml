@@ -33,8 +33,8 @@ jobs:
         name: Build Arch Linux package
         uses: FFY00/build-arch-package@v1
         with:
-          PKGBUILD: $GITHUB_WORKSPACE/PKGBUILD
-          OUTDIR: $HOME/arch-packages
+          PKGBUILD: PKGBUILD
+          OUTDIR: .
       -
         name: list dir
         run: ls -ltra
