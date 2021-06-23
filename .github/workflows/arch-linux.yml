@@ -26,12 +26,15 @@ jobs:
       -
         name: Build Application
         run: go build .
+      -
+        name: list dir
+        run: ls -ltra
       - 
         name: Build Arch Linux package
         uses: FFY00/build-arch-package@v1
         with:
-          PKGBUILD: PKGBUILD
-          OUTDIR: ./
+          PKGBUILD: $GITHUB_WORKSPACE/PKGBUILD
+          OUTDIR: $HOME/arch-packages
       -
         name: list dir
         run: ls -ltra
