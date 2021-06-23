@@ -10,9 +10,6 @@ arch=('x86_64')
 url="https://github.com/splicemachine/splicectl"
 license=('GPL3')
 groups=()
-depends=('go')
-makedepends=('go' 'git')
-checkdepends=('go')
 optdepends=()
 provides=()
 conflicts=()
@@ -24,17 +21,6 @@ source=("$pkgname-$pkgver::git+https://github.com/splicemachine/splicectl/")
 noextract=()
 md5sums=('SKIP')
 validpgpkeys=()
-
-prepare() {
-	cd "$srcdir/$pkgname-$pkgver"
-	export RELEASE_VERSION=$pkgver
-	make changelog
-}
-
-build() {
-	cd "$srcdir/$pkgname-$pkgver"
-	go build
-}
 
 package() {
 	cd "$pkgname-$pkgver"
