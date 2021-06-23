@@ -29,6 +29,9 @@ jobs:
       -
         name: list dir
         run: ls -ltra
+      -
+        name: cat pkgb
+        run: cat PKGBUILD
       - 
         name: Build Arch Linux package
         uses: FFY00/build-arch-package@v1
