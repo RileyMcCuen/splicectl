@@ -1,12 +1,14 @@
 name: Create Arch Linux Release
 
 on:
+  workflow_dispatch:
   release:
     types:
       - created
 
 jobs:
   release:
+    runs-on: ubuntu-latest
     container:
       image: archlinux
       options: --privileged
@@ -35,6 +37,7 @@ jobs:
           aws_bucket: s3://splice-releases/splicectl/aur/
           source_dir: $HOME/arch-packages
   test:
+    runs-on: ubuntu-latest
     needs: release
     container:
       image: archlinux
