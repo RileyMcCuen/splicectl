@@ -9,11 +9,6 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
-    container:
-      image: archlinux
-      options: --privileged
-      volumes:
-        - /sys/fs/cgroup:/sys/fs/cgroup
     steps:
       - 
         name: Checkout
@@ -24,20 +19,14 @@ jobs:
         with:
           go-version: 1.16
       -
-        name: Build Application
-        run: go build .
-      -
         name: list dir
         run: ls -ltra
       -
         name: cat pkgb
         run: cat PKGBUILD
       - 
-        name: Build Arch Linux package
-        uses: FFY00/build-arch-package@v1
-        with:
-          PKGBUILD: PKGBUILD
-          OUTDIR: .
+        name: Makepkg Build and Check
+        uses: edlanglois/pkgbuild-action@v1.1.7
       -
         name: list dir
         run: ls -ltra
@@ -52,11 +41,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
     needs: release
-    container:
-      image: archlinux
-      options: --privileged
-      volumes:
-        - /sys/fs/cgroup:/sys/fs/cgroup
     steps:
       -
         name: Add Repo to pacman, install and test splicectl
