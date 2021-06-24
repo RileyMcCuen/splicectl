@@ -2,7 +2,7 @@
 
 # Maintainer: Your Name <blo@splicemachine.com>
 pkgname=("splicectl")
-pkgver=v0.1.1
+pkgver=RELEASE_VERSION
 pkgrel=1
 epoch=
 pkgdesc="cli is used to manage features of a SpliceDB Cluster running on Kubernetes."
@@ -10,7 +10,7 @@ arch=('x86_64')
 url="https://github.com/splicemachine/splicectl"
 license=('GPL3')
 groups=()
-optdepends=()
+makedepends=('git')
 provides=()
 conflicts=()
 replaces=()
@@ -23,6 +23,5 @@ md5sums=('SKIP')
 validpgpkeys=()
 
 package() {
-	cd "$pkgname-$pkgver"
-	install -Dm755 "$srcdir/$pkgname-$pkgver/splicectl" "$pkgdir/usr/bin/splicectl"
+	install -Dm755 "/splice/splicectl" "$pkgdir/usr/bin/splicectl"
 }
