@@ -10,6 +10,11 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
+      -
+        name: Get Version
+        run: |
+          echo RELEASE_TAG=$(echo ${GITHUB_REF} | rev | cut -d'/' -f 1 | rev ) >> ${GITHUB_ENV}
+          echo ${{ env.RELEASE_TAG }}
       - 
         name: Checkout
         uses: actions/checkout@v2
