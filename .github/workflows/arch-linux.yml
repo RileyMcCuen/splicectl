@@ -32,9 +32,6 @@ jobs:
       -
         name: cat pkgb
         run: cat PKGBUILD
-      - name: Arch makepkg
-        uses: py7hon/arch-makepkg@v0.0.2
-
       -
         name: list dir
         run: ls -ltra
