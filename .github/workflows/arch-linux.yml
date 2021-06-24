@@ -25,7 +25,8 @@ jobs:
           chmod 777 ./entrypoint.sh
           docker build -t archl .
           cd ../../../
-          sudo docker run -a stdin -a stdout -a stderr -e RELEASE_VERSION=$RELEASE_VERSION --mount type=bind,source=$(pwd),target=/splice archl
+          sudo chmod 777 -R $(pwd)
+          docker run -a stdin -a stdout -a stderr -e RELEASE_VERSION=$RELEASE_VERSION --mount type=bind,source=$(pwd),target=/splice archl
       -
         name: Upload to S3
         uses: shallwefootball/s3-upload-action@master
