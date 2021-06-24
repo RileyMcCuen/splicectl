@@ -22,6 +22,7 @@ jobs:
           # RELEASE_VERSION=$(echo ${GITHUB_REF} | rev | cut -d'/' -f 1 | rev )
           cd .github/workflows/arch
           cp ./release-entrypoint.sh ./entrypoint.sh
+          chmod 777 ./entrypoint.sh
           docker build -t archl .
           cd ../../../
           docker run -a stdin -a stdout -a stderr -e RELEASE_VERSION=$RELEASE_VERSION --mount type=bind,source=$(pwd),target=/splice archl
@@ -48,6 +49,7 @@ jobs:
           # RELEASE_VERSION=$(echo ${GITHUB_REF} | rev | cut -d'/' -f 1 | rev )
           cd .github/workflows/arch
           cp ./test-entrypoint.sh ./entrypoint.sh
+          chmod 777 ./entrypoint.sh
           docker build -t archl .
           cd ../../../
           docker run -a stdin -a stdout -a stderr -e RELEASE_VERSION=$RELEASE_VERSION --mount type=bind,source=$(pwd),target=/splice archl
