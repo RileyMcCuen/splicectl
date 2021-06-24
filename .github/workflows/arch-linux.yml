@@ -44,7 +44,8 @@ jobs:
       - 
         name: Test package
         run: |
-          RELEASE_VERSION=$(echo ${GITHUB_REF} | rev | cut -d'/' -f 1 | rev )
+          RELEASE_VERSION=v0.1.2
+          # RELEASE_VERSION=$(echo ${GITHUB_REF} | rev | cut -d'/' -f 1 | rev )
           cd .github/workflows/arch
           cp ./test-entrypoint.sh ./entrypoint.sh
           docker build -t archl .
