@@ -9,47 +9,45 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
-    container: aursu/rpmbuild:createrepo
     steps:
-      -
-        name: create checkout dir
-        run: |
-          pwd
-          echo $GITHUB_WORKSPACE
-          sudo mkdir -p $GITHUB_WORKSPACE/repo
-          chmod -R 777 repo
       -
         name: Checkout
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
           path: repo
-      -
-        name: Makepkg
-        run: |
-          # Set release version based on github ref
-          RELEASE_VERSION=v0.1.2
-          # RELEASE_VERSION=$(echo ${GITHUB_REF} | rev | cut -d'/' -f 1 | rev )
-          sed -i "s/RELEASE_VERSION/${RELEASE_VERSION}/" ./splicectl.spec
-
-          # Build the package and organize files
-          rpmbuild -ba splicectl.spec
-          cp splicectl.spec /home/builder/rpm/splicectl.spec
-          cp splice.repo /home/builder/rpm/splice.repo
-          createrepo /home/builder/rpm
-
-          # Put all files into known folder for easy sync with S3
-          mkdir -p yum-files
-          cp -rf /home/builder/rpm/* ./yum-files
-      -
-        name: Upload to S3
-        uses: shallwefootball/s3-upload-action@master
+      - 
+        name: build RPM package
+        id: rpm
+        uses: naveenrajm7/rpmbuild@master
         with:
-          aws_key_id: ${{ secrets.AWS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
-          aws_bucket: 427-assignment1
-          source_dir: yum-files
-          destination_dir: splicectl/yum/
+          spec_file: "splicectl.spec"
+      # -
+      #   name: Makepkg
+      #   run: |
+      #     # Set release version based on github ref
+      #     RELEASE_VERSION=v0.1.2
+      #     # RELEASE_VERSION=$(echo ${GITHUB_REF} | rev | cut -d'/' -f 1 | rev )
+      #     sed -i "s/RELEASE_VERSION/${RELEASE_VERSION}/" ./splicectl.spec
+
+      #     # Build the package and organize files
+      #     rpmbuild -ba splicectl.spec
+      #     cp splicectl.spec /home/builder/rpm/splicectl.spec
+      #     cp splice.repo /home/builder/rpm/splice.repo
+      #     createrepo /home/builder/rpm
+
+      #     # Put all files into known folder for easy sync with S3
+      #     mkdir -p yum-files
+      #     cp -rf /home/builder/rpm/* ./yum-files
+      # -
+      #   name: Upload to S3
+      #   uses: shallwefootball/s3-upload-action@master
+      #   with:
+      #     aws_key_id: ${{ secrets.AWS_KEY_ID }}
+      #     aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
+      #     aws_bucket: 427-assignment1
+      #     source_dir: yum-files
+      #     destination_dir: splicectl/yum/
   test:
     runs-on: ubuntu-latest
     container: rpmbuild/centos7
