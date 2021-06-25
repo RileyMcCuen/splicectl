@@ -9,7 +9,9 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
-    container: rpmbuild/centos7
+    container: 
+      image: rpmbuild/centos7
+      options: "--tty"
     steps:
       -
         name: Open Permissions for Checkout
