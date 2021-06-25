@@ -9,6 +9,8 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
+    container:
+      image: archlinux:base-devel
     steps:
       -
         name: Checkout
@@ -20,13 +22,28 @@ jobs:
         run: |
           RELEASE_VERSION=v0.1.2
           # RELEASE_VERSION=$(echo ${GITHUB_REF} | rev | cut -d'/' -f 1 | rev )
-          cd .github/workflows/arch
-          cp ./release-entrypoint.sh ./entrypoint.sh
-          chmod 777 ./entrypoint.sh
-          docker build -t archl .
-          cd ../../../
-          sudo chmod 777 -R $(pwd)
-          docker run -a stdin -a stdout -a stderr -e RELEASE_VERSION=$RELEASE_VERSION --mount type=bind,source=$(pwd),target=/splice archl
+          echo "${RELEASE_VERSION}"
+          sed -i "s/RELEASE_VERSION/${RELEASE_VERSION}/" ./PKGBUILD
+          echo "update release version in pkgbuild"
+          pacman -Sy --needed --noconfirm sudo # Install sudo
+          echo "got sudo"
+          useradd builduser -m # Create the builduser
+          echo "did useradd"
+          passwd -d builduser # Delete the buildusers password
+          echo "deleted password"
+          printf 'builduser ALL=(ALL) ALL\n' | tee -a /etc/sudoers # Allow the builduser passwordless sudo
+          echo "added to sudoers"
+          curl -L https://github.com/splicemachine/splicectl/releases/download/$RELEASE_VERSION/splicectl_linux_amd64.tar.gz | tar -xz -C .
+          cp ./splicectl_linux_amd64/splicectl ./splicectl
+          echo "got the executable"
+          sudo -u builduser bash -c "makepkg -s --noconfirm && repo-add splice.db.tar.gz splicectl-${RELEASE_VERSION}-1-x86_64.pkg.tar.zst" # Clone and build a package
+          mkdir -p archl-files
+          mv splice.db archl-files/splice.db
+          mv splice.db.tar.gz archl-files/splice.db.tar.gz
+          mv splice.files archl-files/splice.files
+          mv splice.files.tar.gz archl-files/splice.files.tar.gz
+          mv splicectl-${RELEASE_VERSION}-1-x86_64.pkg.tar.zst archl-files/splicectl-${RELEASE_VERSION}-1-x86_64.pkg.tar.zst
+          echo "did makepkg"
       -
         name: Upload to S3
         uses: shallwefootball/s3-upload-action@master
@@ -36,21 +53,21 @@ jobs:
           aws_bucket: 427-assignment1
           source_dir: archl-files
           destination_dir: splicectl/aur/
-  test:
-    runs-on: ubuntu-latest
-    needs: release
-    steps:
-      - 
-        name: Checkout
-        uses: actions/checkout@v2
-      - 
-        name: Test package
-        run: |
-          RELEASE_VERSION=v0.1.2
-          # RELEASE_VERSION=$(echo ${GITHUB_REF} | rev | cut -d'/' -f 1 | rev )
-          cd .github/workflows/arch
-          cp ./test-entrypoint.sh ./entrypoint.sh
-          chmod 777 ./entrypoint.sh
-          docker build -t archl .
-          cd ../../../
-          sudo docker run -a stdin -a stdout -a stderr -e RELEASE_VERSION=$RELEASE_VERSION --mount type=bind,source=$(pwd),target=/splice archl
+  # test:
+  #   runs-on: ubuntu-latest
+  #   needs: release
+  #   steps:
+  #     - 
+  #       name: Checkout
+  #       uses: actions/checkout@v2
+  #     - 
+  #       name: Test package
+  #       run: |
+  #         RELEASE_VERSION=v0.1.2
+  #         # RELEASE_VERSION=$(echo ${GITHUB_REF} | rev | cut -d'/' -f 1 | rev )
+  #         sudo chmod 777 -R .
+  #         cd .github/workflows/arch
+  #         cp ./test-entrypoint.sh ./entrypoint.sh
+  #         docker build -t archl .
+  #         cd ../../../
+  #         docker run -a stdin -a stdout -a stderr -e RELEASE_VERSION=$RELEASE_VERSION --mount type=bind,source=$(pwd),target=/splice archl
