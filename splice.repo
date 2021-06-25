@@ -1,6 +1,6 @@
 [splice]
 name=Splicemachine Repo
-baseurl=https://splice-releases.s3.amazonaws.com/splicectl/yum/
+baseurl=https://427-assignment1.s3.amazonaws.com/splicectl/yum/
 enabled=1
 gpgcheck=0
 
