@@ -80,4 +80,6 @@ jobs:
           echo "added repo"
           yum install -y splicectl
           echo "installed splice"
+          yum list | grep splice
+          splicectl version
           splicectl version | grep ${RELEASE_VERSION}
