@@ -1,76 +1,32 @@
-name: Create Yum Release
+Name:           splicectl
+Version:        RELEASE_VERSION
+Release:        1%{?dist}
+Summary:        The splicectl cli is used to manage features of a SpliceDB Cluster running on Kubernetes.
+License:        GPLv3+
+BuildArch:	x86_64
+BuildRoot:	/tmp
+URL:            https://github.com/splicemachine/%{name}
+%define debug_package %{nil}
+%undefine _disable_source_fetch
+%global _missing_build_ids_terminate_build 0
+Source0:        https://github.com/splicemachine/%{name}/releases/download/%{version}/%{name}_linux_amd64.tar.gz
+      
+%description 
+The splicectl cli is used to manage features of a SpliceDB Cluster running on Kubernetes.
+Primarily there are settings that are stored inside a Hashicorp Vault running in the cluster which are not exposed outside of the cluster. This client utility allows us to manipulate these settings without having to do port-forwarding and other Kubernetes tricks to allow us to connect to the Vault service with the cli tools.
 
-on:
-  workflow_dispatch:
-  release:
-    types:
-      - created
+%prep
+%setup -q -n %{name}_linux_amd64
 
-jobs:
-  release:
-    runs-on: ubuntu-latest
-    steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      -
-        name: change release ver
-        run: |
-          # Set release version based on github ref
-          RELEASE_VERSION=v0.1.2
-          # RELEASE_VERSION=$(echo ${GITHUB_REF} | rev | cut -d'/' -f 1 | rev )
-          sed -i "s/RELEASE_VERSION/${RELEASE_VERSION}/" ./splicectl.spec
-      - 
-        name: build RPM package
-        id: rpm
-        uses: naveenrajm7/rpmbuild@master
-        with:
-          spec_file: "splicectl.spec"
-      # -
-      #   name: Makepkg
-      #   run: |
-      #     # Set release version based on github ref
-      #     RELEASE_VERSION=v0.1.2
-      #     # RELEASE_VERSION=$(echo ${GITHUB_REF} | rev | cut -d'/' -f 1 | rev )
-      #     sed -i "s/RELEASE_VERSION/${RELEASE_VERSION}/" ./splicectl.spec
+%build
 
-      #     # Build the package and organize files
-      #     rpmbuild -ba splicectl.spec
-      #     cp splicectl.spec /home/builder/rpm/splicectl.spec
-      #     cp splice.repo /home/builder/rpm/splice.repo
-      #     createrepo /home/builder/rpm
+%install
+mkdir -p $RPM_BUILD_ROOT/usr/local/bin/
+cp splicectl $RPM_BUILD_ROOT/usr/local/bin/splicectl
 
-      #     # Put all files into known folder for easy sync with S3
-      #     mkdir -p yum-files
-      #     cp -rf /home/builder/rpm/* ./yum-files
-      # -
-      #   name: Upload to S3
-      #   uses: shallwefootball/s3-upload-action@master
-      #   with:
-      #     aws_key_id: ${{ secrets.AWS_KEY_ID }}
-      #     aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
-      #     aws_bucket: 427-assignment1
-      #     source_dir: yum-files
-      #     destination_dir: splicectl/yum/
-  test:
-    runs-on: ubuntu-latest
-    container: rpmbuild/centos7
-    needs: release
-    steps:
-      - 
-        name: Checkout
-        uses: actions/checkout@v2
-      - 
-        name: Test package
-        run: |
-          # Set release version based on github ref
-          RELEASE_VERSION=v0.1.2
-          # RELEASE_VERSION=$(echo ${GITHUB_REF} | rev | cut -d'/' -f 1 | rev )
+%clean
+echo $BUILDROOT
 
-          # Get the package and make sure that the version command prints out the correct version that was set during release
-          cp splice.repo /etc/yum.repos.d/splice.repo
-          yum update
-          yum install splicectl
-          splicectl version | grep ${RELEASE_VERSION}
+%files
+%defattr(-,bin,bin)
+/usr/local/bin/splicectl
