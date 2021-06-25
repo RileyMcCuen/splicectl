@@ -9,13 +9,11 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
-    container: 
-      image: rpmbuild/centos7
-      options: -t
+    container: aursu/rpmbuild:createrepo
     steps:
       -
         name: Open Permissions for Checkout
-        run: sudo -u root bash -c "chmod 777 -R ."
+        run: chmod 777 -R .
       -
         name: Checkout
         uses: actions/checkout@v2
