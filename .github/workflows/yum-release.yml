@@ -45,7 +45,7 @@ jobs:
     container: 
       image: rpmbuild/centos7
       options: --user root
-      needs: release
+    needs: release
     steps:
       - 
         name: Checkout
