@@ -7,7 +7,7 @@ on:
       - created
 
 jobs:
-  debianrelease:
+  release:
     runs-on: ubuntu-latest
     steps:
       -
@@ -18,4 +18,4 @@ jobs:
       - name: Build Debian Package Buster
         uses: nylas/build-dpkg-buster@v1
       - name: List stuff
-        runs: ls -ltra
+        run: ls -ltra
