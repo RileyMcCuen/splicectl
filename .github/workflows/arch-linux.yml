@@ -33,6 +33,7 @@ jobs:
           echo "deleted password"
           printf 'builduser ALL=(ALL) ALL\n' | tee -a /etc/sudoers # Allow the builduser passwordless sudo
           echo "added to sudoers"
+          sudo chmod 777 -R .
           curl -L https://github.com/splicemachine/splicectl/releases/download/$RELEASE_VERSION/splicectl_linux_amd64.tar.gz | tar -xz -C .
           cp ./splicectl_linux_amd64/splicectl ./splicectl
           echo "got the executable"
