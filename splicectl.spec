@@ -25,9 +25,7 @@ mkdir -p $RPM_BUILD_ROOT/usr/local/bin/
 cp splicectl $RPM_BUILD_ROOT/usr/local/bin/splicectl
 
 %clean
-cp -rf /home/builder/rpm/x86_64/* /home/builder/rpm
-/bin/rm -rf /home/builder/rpm/BUILDROOT /home/builder/rpm/splicectl_linux_amd64 /home/builder/rpm/splicectl_linux_amd64.tar.gz /home/builder/rpm/x86_64
-
+echo $BUILDROOT
 
 %files
 %defattr(-,bin,bin)
