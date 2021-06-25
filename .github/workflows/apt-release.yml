@@ -18,8 +18,8 @@ jobs:
       - name: Build Package
         run: |
           # Set release version based on github ref
-          # RELEASE_VERSION=v0.1.2
-          RELEASE_VERSION=$(echo ${GITHUB_REF} | rev | cut -d'/' -f 1 | rev )
+          RELEASE_VERSION=v0.1.2
+          # RELEASE_VERSION=$(echo ${GITHUB_REF} | rev | cut -d'/' -f 1 | rev )
           sed -i "s/RELEASE_VERSION/${RELEASE_VERSION}/" ./PKGBUILD
 
           # Open up permissions on all files so no permissions issues happen
