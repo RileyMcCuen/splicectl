@@ -12,6 +12,9 @@ jobs:
     container: rpmbuild/centos7
     steps:
       -
+        name: Open Permissions for Checkout
+        run: chmod 777 -R .
+      -
         name: Checkout
         uses: actions/checkout@v2
         with:
