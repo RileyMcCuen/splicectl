@@ -30,7 +30,10 @@ jobs:
           spec_file: "splicectl.spec"
       -
         name: Move .spec to Upload Dir
-        run: cp splicectl.spec ${{ steps.rpm.outputs.rpm_dir_path }}/x86_64/splicectl.spec
+        run: |
+          mkdir -p yum-files
+          cp splicectl.spec yum-files/splicectl.spec
+          cp -R ${{ steps.rpm.outputs.rpm_dir_path }}/x86_64/* yum-files
       -
         name: Upload to S3
         uses: shallwefootball/s3-upload-action@master
@@ -38,7 +41,7 @@ jobs:
           aws_key_id: ${{ secrets.AWS_KEY_ID }}
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
           aws_bucket: 427-assignment1
-          source_dir: ${{ steps.rpm.outputs.rpm_dir_path }}/x86_64
+          source_dir: yum-files
           destination_dir: splicectl/yum/
   test:
     runs-on: ubuntu-latest
