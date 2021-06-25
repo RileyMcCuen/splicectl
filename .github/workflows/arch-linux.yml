@@ -20,6 +20,7 @@ jobs:
       -
         name: Makepkg
         run: |
+          pwd
           RELEASE_VERSION=v0.1.2
           # RELEASE_VERSION=$(echo ${GITHUB_REF} | rev | cut -d'/' -f 1 | rev )
           echo "${RELEASE_VERSION}"
