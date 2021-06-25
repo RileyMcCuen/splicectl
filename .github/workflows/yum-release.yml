@@ -1,4 +1,4 @@
-name: Create Yum Release
+name: Create Arch Linux Release
 
 on:
   workflow_dispatch:
@@ -28,12 +28,13 @@ jobs:
           sed -i "s/RELEASE_VERSION/${RELEASE_VERSION}/" ./splicectl.spec
 
           # Build the package and organize files
+          chmod 777 -R .
           rpmbuild -ba splicectl.spec
           cp splicectl.spec /home/builder/rpm/splicectl.spec
           cp splice.repo /home/builder/rpm/splice.repo
           createrepo /home/builder/rpm
 
-          # put all files into known folder for easy sync with S3
+          # Put all files into known folder for easy sync with S3
           mkdir -p yum-files
           cp -rf /home/builder/rpm/* ./yum-files
       -
