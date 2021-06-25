@@ -7,63 +7,63 @@ on:
       - created
 
 jobs:
-  release:
-    runs-on: ubuntu-latest
-    steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      -
-        name: change release ver
-        run: |
-          # Set release version based on github ref
-          RELEASE_VERSION=v0.1.2
-          # RELEASE_VERSION=$(echo ${GITHUB_REF} | rev | cut -d'/' -f 1 | rev )
-          sed -i "s/RELEASE_VERSION/${RELEASE_VERSION}/" ./splicectl.spec
-      - 
-        name: build RPM package
-        id: rpm
-        uses: naveenrajm7/rpmbuild@master
-        with:
-          spec_file: "splicectl.spec"
-      -
-        name: build output
-        run: |
-          ls -ltra ${{ steps.rpm.outputs.rpm_dir_path }}
-      # -
-      #   name: Makepkg
-      #   run: |
-      #     # Set release version based on github ref
-      #     RELEASE_VERSION=v0.1.2
-      #     # RELEASE_VERSION=$(echo ${GITHUB_REF} | rev | cut -d'/' -f 1 | rev )
-      #     sed -i "s/RELEASE_VERSION/${RELEASE_VERSION}/" ./splicectl.spec
+#   release:
+#     runs-on: ubuntu-latest
+#     steps:
+#       -
+#         name: Checkout
+#         uses: actions/checkout@v2
+#         with:
+#           fetch-depth: 0
+#       -
+#         name: change release ver
+#         run: |
+#           # Set release version based on github ref
+#           RELEASE_VERSION=v0.1.2
+#           # RELEASE_VERSION=$(echo ${GITHUB_REF} | rev | cut -d'/' -f 1 | rev )
+#           sed -i "s/RELEASE_VERSION/${RELEASE_VERSION}/" ./splicectl.spec
+#       - 
+#         name: build RPM package
+#         id: rpm
+#         uses: naveenrajm7/rpmbuild@master
+#         with:
+#           spec_file: "splicectl.spec"
+#       -
+#         name: build output
+#         run: |
+#           ls -ltra ${{ steps.rpm.outputs.rpm_dir_path }}
+#       # -
+#       #   name: Makepkg
+#       #   run: |
+#       #     # Set release version based on github ref
+#       #     RELEASE_VERSION=v0.1.2
+#       #     # RELEASE_VERSION=$(echo ${GITHUB_REF} | rev | cut -d'/' -f 1 | rev )
+#       #     sed -i "s/RELEASE_VERSION/${RELEASE_VERSION}/" ./splicectl.spec
 
-      #     # Build the package and organize files
-      #     rpmbuild -ba splicectl.spec
-      #     cp splicectl.spec /home/builder/rpm/splicectl.spec
-      #     cp splice.repo /home/builder/rpm/splice.repo
-      #     createrepo /home/builder/rpm
+#       #     # Build the package and organize files
+#       #     rpmbuild -ba splicectl.spec
+#       #     cp splicectl.spec /home/builder/rpm/splicectl.spec
+#       #     cp splice.repo /home/builder/rpm/splice.repo
+#       #     createrepo /home/builder/rpm
 
-      #     # Put all files into known folder for easy sync with S3
-      #     mkdir -p yum-files
-      #     cp -rf /home/builder/rpm/* ./yum-files
-      -
-        name: Upload to S3
-        uses: shallwefootball/s3-upload-action@master
-        with:
-          aws_key_id: ${{ secrets.AWS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
-          aws_bucket: 427-assignment1
-          source_dir: ${{ steps.rpm.outputs.rpm_dir_path }}/x86_64
-          destination_dir: splicectl/yum/
+#       #     # Put all files into known folder for easy sync with S3
+#       #     mkdir -p yum-files
+#       #     cp -rf /home/builder/rpm/* ./yum-files
+#       -
+#         name: Upload to S3
+#         uses: shallwefootball/s3-upload-action@master
+#         with:
+#           aws_key_id: ${{ secrets.AWS_KEY_ID }}
+#           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
+#           aws_bucket: 427-assignment1
+#           source_dir: ${{ steps.rpm.outputs.rpm_dir_path }}/x86_64
+#           destination_dir: splicectl/yum/
   test:
     runs-on: ubuntu-latest
     container: 
       image: rpmbuild/centos7
       options: --user root
-    needs: release
+   #  needs: release
     steps:
       - 
         name: Checkout
@@ -77,5 +77,7 @@ jobs:
 
           # Get the package and make sure that the version command prints out the correct version that was set during release
           cp splice.repo /etc/yum.repos.d/splice.repo
+          echo "added repo"
           yum install -y splicectl
+          echo "installed splice"
           splicectl version | grep ${RELEASE_VERSION}
