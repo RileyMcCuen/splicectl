@@ -30,7 +30,8 @@ jobs:
           spec_file: "splicectl.spec"
       -
         name: build output
-        run: ls -ltra ${{ steps.rpm.outputs.rpm_dir_path }}
+        run: |
+          ls -ltra ${{ steps.rpm.outputs.rpm_dir_path }}
       # -
       #   name: Makepkg
       #   run: |
@@ -49,14 +50,14 @@ jobs:
       #     mkdir -p yum-files
       #     cp -rf /home/builder/rpm/* ./yum-files
       # -
-      #   name: Upload to S3
-      #   uses: shallwefootball/s3-upload-action@master
-      #   with:
-      #     aws_key_id: ${{ secrets.AWS_KEY_ID }}
-      #     aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
-      #     aws_bucket: 427-assignment1
-      #     source_dir: yum-files
-      #     destination_dir: splicectl/yum/
+        name: Upload to S3
+        uses: shallwefootball/s3-upload-action@master
+        with:
+          aws_key_id: ${{ secrets.AWS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
+          aws_bucket: 427-assignment1
+          source_dir: ${{ steps.rpm.outputs.rpm_dir_path }}/x86_64
+          destination_dir: splicectl/yum/
   test:
     runs-on: ubuntu-latest
     container: rpmbuild/centos7
