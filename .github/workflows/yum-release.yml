@@ -28,6 +28,9 @@ jobs:
         uses: naveenrajm7/rpmbuild@master
         with:
           spec_file: "splicectl.spec"
+      -
+        name: build output
+        run: ls -ltra /github/home/rpmbuild/BUILD
       # -
       #   name: Makepkg
       #   run: |
