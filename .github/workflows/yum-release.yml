@@ -12,9 +12,6 @@ jobs:
     container: aursu/rpmbuild:createrepo
     steps:
       -
-        name: Open Permissions for Checkout
-        run: chmod 777 -R .
-      -
         name: Checkout
         uses: actions/checkout@v2
         with:
@@ -22,9 +19,6 @@ jobs:
       -
         name: Makepkg
         run: |
-          # Install createrepo which must be done as root
-          sudo -u root bash -c "yum install -y createrepo"
-
           # Set release version based on github ref
           RELEASE_VERSION=v0.1.2
           # RELEASE_VERSION=$(echo ${GITHUB_REF} | rev | cut -d'/' -f 1 | rev )
