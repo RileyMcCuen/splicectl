@@ -20,7 +20,7 @@ jobs:
           # Set release version based on github ref
           RELEASE_VERSION=v0.1.2
           # RELEASE_VERSION=$(echo ${GITHUB_REF} | rev | cut -d'/' -f 1 | rev )
-          sed -i "s/RELEASE_VERSION/${RELEASE_VERSION}/" ./PKGBUILD
+          sed -i "s/RELEASE_VERSION/${RELEASE_VERSION}/" control
 
           # Open up permissions on all files so no permissions issues happen
           sudo chmod 777 -R .
@@ -34,6 +34,7 @@ jobs:
           cp control splicectl/DEBIAN/control
           mv splicectl.tmp splicectl/usr/bin/splicectl
           dpkg-deb --build splicectl
+          ls -ltra
           ls -ltra splicectl
           ls -ltra splicectl/DEBIAN
           ls -ltra splicectl/usr
