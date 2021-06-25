@@ -13,7 +13,7 @@ jobs:
     steps:
       -
         name: Open Permissions for Checkout
-        run: chmod 777 -R .
+        run: sudo -u root bash -c "chmod 777 -R ."
       -
         name: Checkout
         uses: actions/checkout@v2
@@ -31,7 +31,6 @@ jobs:
           sed -i "s/RELEASE_VERSION/${RELEASE_VERSION}/" ./splicectl.spec
 
           # Build the package and organize files
-          chmod 777 -R .
           rpmbuild -ba splicectl.spec
           cp splicectl.spec /home/builder/rpm/splicectl.spec
           cp splice.repo /home/builder/rpm/splice.repo
