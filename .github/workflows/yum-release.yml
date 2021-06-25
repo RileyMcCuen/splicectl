@@ -49,7 +49,7 @@ jobs:
       #     # Put all files into known folder for easy sync with S3
       #     mkdir -p yum-files
       #     cp -rf /home/builder/rpm/* ./yum-files
-      # -
+      -
         name: Upload to S3
         uses: shallwefootball/s3-upload-action@master
         with:
