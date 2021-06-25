@@ -16,7 +16,7 @@ jobs:
         run: |
           pwd
           echo $GITHUB_WORKSPACE
-          mkdir -p $GITHUB_WORKSPACE/repo
+          sudo mkdir -p $GITHUB_WORKSPACE/repo
           chmod -R 777 repo
       -
         name: Checkout
