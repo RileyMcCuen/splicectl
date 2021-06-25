@@ -23,32 +23,14 @@ jobs:
           # RELEASE_VERSION=$(echo ${GITHUB_REF} | rev | cut -d'/' -f 1 | rev )
           sed -i "s/RELEASE_VERSION/${RELEASE_VERSION}/" ./splicectl.spec
       - 
-        name: build RPM package
+        name: Build RPM package
         id: rpm
         uses: naveenrajm7/rpmbuild@master
         with:
           spec_file: "splicectl.spec"
       -
-        name: build output
-        run: |
-          ls -ltra ${{ steps.rpm.outputs.rpm_dir_path }}
-      # -
-      #   name: Makepkg
-      #   run: |
-      #     # Set release version based on github ref
-      #     RELEASE_VERSION=v0.1.2
-      #     # RELEASE_VERSION=$(echo ${GITHUB_REF} | rev | cut -d'/' -f 1 | rev )
-      #     sed -i "s/RELEASE_VERSION/${RELEASE_VERSION}/" ./splicectl.spec
-
-      #     # Build the package and organize files
-      #     rpmbuild -ba splicectl.spec
-      #     cp splicectl.spec /home/builder/rpm/splicectl.spec
-      #     cp splice.repo /home/builder/rpm/splice.repo
-      #     createrepo /home/builder/rpm
-
-      #     # Put all files into known folder for easy sync with S3
-      #     mkdir -p yum-files
-      #     cp -rf /home/builder/rpm/* ./yum-files
+        name: Move .spec to Upload Dir
+        run: cp splicectl.spec ${{ steps.rpm.outputs.rpm_dir_path }}/x86_64/splicectl.spec
       -
         name: Upload to S3
         uses: shallwefootball/s3-upload-action@master
@@ -63,7 +45,7 @@ jobs:
     container: 
       image: rpmbuild/centos7
       options: --user root
-   #  needs: release
+      needs: release
     steps:
       - 
         name: Checkout
