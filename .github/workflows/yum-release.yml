@@ -60,7 +60,9 @@ jobs:
           destination_dir: splicectl/yum/
   test:
     runs-on: ubuntu-latest
-    container: rpmbuild/centos7
+    container: 
+      image: rpmbuild/centos7
+      options: --user root
     needs: release
     steps:
       - 
