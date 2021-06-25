@@ -77,6 +77,6 @@ jobs:
 
           # Get the package and make sure that the version command prints out the correct version that was set during release
           cp splice.repo /etc/yum.repos.d/splice.repo
-          yum update
-          yum install splicectl
+          yum update -y
+          yum install -y splicectl
           splicectl version | grep ${RELEASE_VERSION}
