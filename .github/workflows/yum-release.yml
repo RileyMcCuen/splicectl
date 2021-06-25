@@ -14,7 +14,9 @@ jobs:
       -
         name: create checkout dir
         run: |
-          mkdir -p repo
+          pwd
+          echo $GITHUB_WORKSPACE
+          mkdir -p $GITHUB_WORKSPACE/repo
           chmod -R 777 repo
       -
         name: Checkout
