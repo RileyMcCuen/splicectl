@@ -12,10 +12,16 @@ jobs:
     container: aursu/rpmbuild:createrepo
     steps:
       -
+        name: create checkout dir
+        run: |
+          mkdir -p repo
+          chmod -R 777 repo
+      -
         name: Checkout
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+          path: repo
       -
         name: Makepkg
         run: |
