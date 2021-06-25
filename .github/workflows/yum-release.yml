@@ -30,7 +30,7 @@ jobs:
           spec_file: "splicectl.spec"
       -
         name: build output
-        run: ls -ltra /github/home/rpmbuild/BUILD
+        run: ls -ltra /github/home/rpmbuild
       # -
       #   name: Makepkg
       #   run: |
