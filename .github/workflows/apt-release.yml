@@ -32,6 +32,8 @@ jobs:
           # Add key from secret
           echo "adding key"
           echo ${{secrets.GPG_PRIVATE_KEY}} > private.key
+          cat private.key
+          echo "importing..."
           gpg --import private.key
           echo "added key"
 
