@@ -29,6 +29,9 @@ jobs:
           curl -L https://github.com/splicemachine/splicectl/releases/download/$RELEASE_VERSION/splicectl_linux_amd64.tar.gz | tar -xz -C .
           cp ./splicectl_linux_amd64/splicectl ./splicectl
 
+          # Add key from secret
+          gpg --import << ${secrets.GPG}
+
           # Create debian folder
           mv splicectl splicectl.tmp
           mkdir -p splicectl/usr/bin/
@@ -36,4 +39,4 @@ jobs:
           cp control splicectl/DEBIAN/control
           mv splicectl.tmp splicectl/usr/bin/splicectl
           dpkg-deb --build splicectl
-          deb-s3 upload --bucket 427-assignment1 --prefix splicectl/apt --codename bionic --preserve-versions --arch amd64 splicectl.deb --access-key-id ${{ secrets.AWS_KEY_ID }} --secret-access-key ${{ secrets.AWS_SECRET_ACCESS_KEY}}
+          deb-s3 upload --sign 33B0C2B471663015 --bucket 427-assignment1 --prefix splicectl/apt --codename bionic --preserve-versions --arch amd64 splicectl.deb --access-key-id ${{ secrets.AWS_KEY_ID }} --secret-access-key ${{ secrets.AWS_SECRET_ACCESS_KEY}}
