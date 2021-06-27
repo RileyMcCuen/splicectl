@@ -35,10 +35,4 @@ jobs:
           cp control splicectl/DEBIAN/control
           mv splicectl.tmp splicectl/usr/bin/splicectl
           dpkg-deb --build splicectl
-          ls -ltra
-          ls -ltra splicectl
-          ls -ltra splicectl/DEBIAN
-          ls -ltra splicectl/usr
-          ls -ltra splicectl/usr/bin
-      # - name: Build Debian Package Buster
-      #   uses: nylas/build-dpkg-buster@v1
+          deb-s3 upload --bucket 427-assignment1 --prefix splicectl/apt --codename bionic --preserve-versions --arch amd64 splicectl.deb --access-key-id ${{ secrets.AWS_KEY_ID }} --secret-access-key ${{ secrets.AWS_SECRET_ACCESS_KEY}}
