@@ -21,7 +21,7 @@ jobs:
           # Set release version based on github ref
           RELEASE_VERSION=v0.1.2
           # RELEASE_VERSION=$(echo ${GITHUB_REF} | rev | cut -d'/' -f 1 | sed "s/v//" | rev )
-          RELEASE_VERSION_WO_V=$(sed "s/v//" $RELEASE_VERSION)
+          RELEASE_VERSION_WO_V=$(sed "s/v//" <<< $RELEASE_VERSION)
           sed -i "s/RELEASE_VERSION/${RELEASE_VERSION_WO_V}/" control
 
           # Open up permissions on all files so no permissions issues happen
