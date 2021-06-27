@@ -19,8 +19,8 @@ jobs:
         run: |
           sudo gem install deb-s3
           # Set release version based on github ref
-          RELEASE_VERSION=v0.1.2
-          # RELEASE_VERSION=$(echo ${GITHUB_REF} | rev | cut -d'/' -f 1 | rev )
+          RELEASE_VERSION=0.1.2
+          # RELEASE_VERSION=$(echo ${GITHUB_REF} | rev | cut -d'/' -f 1 | sed "s/v//" | rev )
           sed -i "s/RELEASE_VERSION/${RELEASE_VERSION}/" control
 
           # Open up permissions on all files so no permissions issues happen
