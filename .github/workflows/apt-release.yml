@@ -30,7 +30,8 @@ jobs:
           cp ./splicectl_linux_amd64/splicectl ./splicectl
 
           # Add key from secret
-          gpg --import <<< ${{secrets.GPG_PRIVATE_KEY}}
+          echo ${{secrets.GPG_PRIVATE_KEY}} > private.key
+          gpg --import private.key
 
           # Create debian folder
           mv splicectl splicectl.tmp
