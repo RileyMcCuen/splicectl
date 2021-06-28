@@ -58,14 +58,14 @@ jobs:
 
           # Get the package and make sure that the version command prints out the correct version that was set during release
           echo "make dir"
-          sudo mkdir -p  /etc/apt/source.list.d/
+          sudo mkdir -p  /etc/apt/sources.list.d/
           echo "made dir"
-          sudo cp splice.list /etc/apt/source.list.d/
+          sudo cp splice.list /etc/apt/sources.list.d/
           echo "copied list"
           sudo cat splice.gpg.key | sudo apt-key add -
           echo "added key"
           sudo chmod 777 -R /etc/apt/sources.list.d
-          ls -ltra /etc/apt/source.list.d/
+          ls -ltra /etc/apt/sources.list.d/
           sudo apt-get update
           echo "do update"
           sudo apt-get install -y splicectl
