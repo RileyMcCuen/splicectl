@@ -60,5 +60,5 @@ jobs:
           sudo mkdir -p  /etc/apt/source.list.d/
           sudo cp splice.list /etc/apt/source.list.d/
           sudo cat splice.gpg.key | sudo apt-key add -
-          sudo yum install -y splicectl
+          yum install -y splicectl
           splicectl version | grep ${RELEASE_VERSION}
