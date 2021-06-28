@@ -64,6 +64,7 @@ jobs:
           echo "copied list"
           sudo cat splice.gpg.key | sudo apt-key add -
           echo "added key"
+          sudo chmod 777 -R /etc/apt/source.list.d
           ls -ltra /etc/apt/source.list.d/
           sudo apt-get update
           echo "do update"
