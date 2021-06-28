@@ -60,5 +60,6 @@ jobs:
           sudo mkdir -p  /etc/apt/source.list.d/
           sudo cp splice.list /etc/apt/source.list.d/
           sudo cat splice.gpg.key | sudo apt-key add -
-          sudo apt install -y splicectl
+          sudo apt-get update
+          sudo apt-get install -y splicectl
           splicectl version | grep ${RELEASE_VERSION}
