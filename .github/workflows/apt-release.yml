@@ -16,6 +16,8 @@ jobs:
         with:
           fetch-depth: 0
       - name: Build Package
+        env:
+          KEY: ${{ secrets.GPG_PRIVATE_KEY }}
         run: |
           sudo gem install deb-s3
           # Set release version based on github ref
@@ -31,7 +33,7 @@ jobs:
 
           # Add key from secret
           echo "adding key"
-          echo ${{secrets.GPG_PRIVATE_KEY}} | gpg --import
+          echo "$KEY" | gpg --import
           echo "added key"
 
           # Create debian folder
